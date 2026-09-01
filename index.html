@@ -152,10 +152,8 @@ body {
    INNER ORANGE LAYER
    ==================================================
 
-   Uses the PNG itself as a mask.
-
-   SCREEN adds light instead of darkening
-   and colouring the paper.
+   This layer uses the PNG itself as a mask,
+   so the orange remains inside the lamp.
    ================================================== */
 
 .inner-light {
@@ -179,7 +177,7 @@ body {
     0;
 
   mix-blend-mode:
-    screen;
+    multiply;
 
   -webkit-mask-image:
     url("lamp.png");
@@ -215,8 +213,8 @@ body {
    SECOND INNER LIGHT
    ==================================================
 
-   Softer orange layer to add warmth while
-   keeping the paper texture visible.
+   A softer layer gives the paper some warmth
+   without destroying the texture.
    ================================================== */
 
 .inner-warmth {
@@ -234,13 +232,13 @@ body {
     none;
 
   background:
-    var(--orange);
+    rgba(249, 128, 33, .55);
 
   opacity:
     0;
 
   mix-blend-mode:
-    screen;
+    soft-light;
 
   -webkit-mask-image:
     url("lamp.png");
@@ -295,13 +293,13 @@ body {
     radial-gradient(
       circle,
 
-      rgba(249, 128, 33, .30)
+      rgba(249, 128, 33, .26)
       0%,
 
-      rgba(249, 128, 33, .14)
+      rgba(249, 128, 33, .12)
       30%,
 
-      rgba(249, 128, 33, .045)
+      rgba(249, 128, 33, .035)
       52%,
 
       transparent
@@ -370,7 +368,7 @@ body {
 .lamp-room.dusk .glow {
 
   opacity:
-    .45;
+    .38;
 
   transform:
     scale(.88);
@@ -381,7 +379,7 @@ body {
 .lamp-room.dusk .inner-light {
 
   opacity:
-    .24;
+    .18;
 
 }
 
@@ -389,7 +387,7 @@ body {
 .lamp-room.dusk .inner-warmth {
 
   opacity:
-    .08;
+    .10;
 
 }
 
@@ -397,14 +395,11 @@ body {
 .lamp-room.dusk .lamp {
 
   filter:
-
-    brightness(1.035)
-
-    saturate(1.03)
-
+    saturate(1.08)
+    sepia(.08)
     drop-shadow(
-      0 0 5px
-      rgba(249, 128, 33, .22)
+      0 0 4px
+      rgba(249, 128, 33, .18)
     );
 
 }
@@ -417,7 +412,7 @@ body {
 .lamp-room.lit .glow {
 
   opacity:
-    .90;
+    .72;
 
   transform:
     scale(.98);
@@ -428,7 +423,7 @@ body {
 .lamp-room.lit .inner-light {
 
   opacity:
-    .52;
+    .32;
 
 }
 
@@ -436,7 +431,7 @@ body {
 .lamp-room.lit .inner-warmth {
 
   opacity:
-    .14;
+    .18;
 
 }
 
@@ -445,13 +440,13 @@ body {
 
   filter:
 
-    brightness(1.10)
+    saturate(1.22)
 
-    saturate(1.05)
+    sepia(.1)
 
     drop-shadow(
-      0 0 9px
-      rgba(249, 128, 33, .38)
+      0 0 7px
+      rgba(249, 128, 33, .28)
     );
 
 }
