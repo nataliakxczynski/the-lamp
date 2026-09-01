@@ -17,11 +17,13 @@
 
 /* ==================================================
    AKARI PAPER LAMP
-   Warm internal light
    ================================================== */
 
 :root {
-  --orange: #f98021;
+
+  --orange:
+    #f98021;
+
 }
 
 
@@ -30,26 +32,37 @@
    ================================================== */
 
 * {
-  box-sizing: border-box;
+  box-sizing:
+    border-box;
 }
 
 
 html,
 body {
 
-  width: 100%;
-  height: 100%;
+  width:
+    100%;
 
-  margin: 0;
-  padding: 0;
+  height:
+    100%;
 
-  background: transparent;
+  margin:
+    0;
+
+  padding:
+    0;
+
+  background:
+    transparent;
 
 }
 
 
 body {
-  overflow: hidden;
+
+  overflow:
+    hidden;
+
 }
 
 
@@ -59,21 +72,33 @@ body {
 
 .lamp-room {
 
-  position: relative;
+  position:
+    relative;
 
-  width: 100%;
-  height: 100%;
+  width:
+    100%;
 
-  min-height: 180px;
+  height:
+    100%;
 
-  display: flex;
+  min-height:
+    180px;
 
-  align-items: center;
-  justify-content: center;
+  display:
+    flex;
 
-  overflow: hidden;
+  align-items:
+    center;
 
-  background: transparent;
+  justify-content:
+    center;
+
+  overflow:
+    hidden;
+
+  background:
+    transparent;
+
 }
 
 
@@ -83,28 +108,38 @@ body {
 
 .lamp-wrapper {
 
-  position: relative;
+  position:
+    relative;
 
-  width: min(62%, 260px);
+  width:
+    min(62%, 260px);
 
-  z-index: 2;
+  z-index:
+    2;
+
 }
 
 
 /* ==================================================
-   ORIGINAL LAMP
+   ORIGINAL PAPER
    ================================================== */
 
 .lamp {
 
-  position: relative;
+  position:
+    relative;
 
-  width: 100%;
-  height: auto;
+  width:
+    100%;
 
-  display: block;
+  height:
+    auto;
 
-  z-index: 5;
+  display:
+    block;
+
+  z-index:
+    3;
 
   transition:
     filter 3s ease;
@@ -113,53 +148,59 @@ body {
 
 
 /* ==================================================
-   INTERNAL LIGHT
+   LUMINOUS COPY
    ==================================================
 
-   This is the actual light source.
+   This is a second copy of the actual lamp.
 
-   It is stronger than before and uses SCREEN
-   rather than MULTIPLY, so it adds light
-   instead of painting the paper.
+   It follows exactly the same silhouette,
+   so the light appears INSIDE the lamp.
    ================================================== */
 
-.inner-light {
+.lamp-light {
 
-  position: absolute;
+  position:
+    absolute;
 
-  inset: 0;
+  inset:
+    0;
 
-  z-index: 3;
+  width:
+    100%;
 
-  pointer-events: none;
+  height:
+    100%;
 
-  background:
-    var(--orange);
-
-  opacity: 0;
-
-  mix-blend-mode: screen;
-
-  -webkit-mask-image:
-    url("lamp.png");
-
-  mask-image:
-    url("lamp.png");
-
-  -webkit-mask-repeat:
-    no-repeat;
-
-  mask-repeat: no-repeat;
-
-  -webkit-mask-position:
-    center;
-
-  mask-position: center;
-
-  -webkit-mask-size:
+  object-fit:
     contain;
 
-  mask-size: contain;
+  z-index:
+    4;
+
+  pointer-events:
+    none;
+
+  opacity:
+    0;
+
+  /*
+     Orange light added to the actual silhouette.
+  */
+
+  filter:
+
+    sepia(1)
+
+    saturate(7)
+
+    hue-rotate(
+      325deg
+    )
+
+    brightness(1.35);
+
+  mix-blend-mode:
+    screen;
 
   transition:
     opacity 3s ease;
@@ -168,46 +209,69 @@ body {
 
 
 /* ==================================================
-   SOFT INTERNAL WARMTH
+   INTERNAL LIGHT CORE
+   ==================================================
+
+   A small concentrated warm area gives the
+   impression of an actual bulb/light source
+   rather than simply colouring the paper.
    ================================================== */
 
-.inner-warmth {
+.light-core {
 
-  position: absolute;
+  position:
+    absolute;
 
-  inset: 0;
+  left:
+    50%;
 
-  z-index: 4;
+  top:
+    50%;
 
-  pointer-events: none;
+  width:
+    35%;
+
+  height:
+    48%;
+
+  transform:
+    translate(
+      -50%,
+      -50%
+    );
+
+  border-radius:
+    50%;
 
   background:
-    var(--orange);
 
-  opacity: 0;
+    radial-gradient(
+      ellipse,
 
-  mix-blend-mode: soft-light;
+      rgba(255, 185, 95, .58)
+      0%,
 
-  -webkit-mask-image:
-    url("lamp.png");
+      rgba(249, 128, 33, .30)
+      30%,
 
-  mask-image:
-    url("lamp.png");
+      rgba(249, 128, 33, .10)
+      58%,
 
-  -webkit-mask-repeat:
-    no-repeat;
+      transparent
+      80%
+    );
 
-  mask-repeat: no-repeat;
+  filter:
+    blur(10px);
 
-  -webkit-mask-position:
-    center;
+  opacity:
+    0;
 
-  mask-position: center;
+  z-index:
+    5;
 
-  -webkit-mask-size:
-    contain;
-
-  mask-size: contain;
+  pointer-events:
+    none;
 
   transition:
     opacity 3s ease;
@@ -216,45 +280,51 @@ body {
 
 
 /* ==================================================
-   VERTICAL LIGHT GLOW
-   ==================================================
-
-   Instead of a round halo, this follows the
-   vertical character of the Akari.
+   OUTER GLOW
    ================================================== */
 
 .glow {
 
-  position: absolute;
+  position:
+    absolute;
 
-  width: 27%;
+  width:
+    31%;
 
-  height: 62%;
+  height:
+    65%;
 
-  border-radius: 50%;
+  left:
+    50%;
 
-  left: 50%;
-  top: 50%;
+  top:
+    50%;
 
   transform:
-    translate(-50%, -50%)
+    translate(
+      -50%,
+      -50%
+    )
     scale(.72);
+
+  border-radius:
+    50%;
 
   background:
 
     radial-gradient(
       ellipse at center,
 
-      rgba(249, 128, 33, .55)
+      rgba(249, 128, 33, .48)
       0%,
 
-      rgba(249, 128, 33, .30)
+      rgba(249, 128, 33, .27)
       28%,
 
-      rgba(249, 128, 33, .12)
+      rgba(249, 128, 33, .10)
       48%,
 
-      rgba(249, 128, 33, .035)
+      rgba(249, 128, 33, .025)
       65%,
 
       transparent
@@ -264,9 +334,11 @@ body {
   filter:
     blur(10px);
 
-  opacity: 0;
+  opacity:
+    0;
 
-  z-index: 1;
+  z-index:
+    1;
 
   transition:
     opacity 3s ease,
@@ -276,82 +348,44 @@ body {
 
 
 /* ==================================================
-   SECONDARY SOFT GLOW
-   ================================================== */
-
-.lamp-room::after {
-
-  content: "";
-
-  position: absolute;
-
-  width: 25%;
-
-  height: 55%;
-
-  left: 50%;
-  top: 50%;
-
-  transform:
-    translate(-50%, -50%);
-
-  border-radius: 50%;
-
-  background:
-    var(--orange);
-
-  filter:
-    blur(30px);
-
-  opacity: 0;
-
-  z-index: 1;
-
-  transition:
-    opacity 3s ease;
-
-}
-
-
-/* ==================================================
    DAY
    ================================================== */
 
-.lamp-room.day .glow {
-
-  opacity: 0;
-
-  transform:
-    translate(-50%, -50%)
-    scale(.72);
-
-}
-
-
-.lamp-room.day::after {
-
-  opacity: 0;
-
-}
-
-
-.lamp-room.day .inner-light {
-
-  opacity: 0;
-
-}
-
-
-.lamp-room.day .inner-warmth {
-
-  opacity: 0;
-
-}
-
-
 .lamp-room.day .lamp {
 
-  filter: none;
+  filter:
+    none;
+
+}
+
+
+.lamp-room.day .lamp-light {
+
+  opacity:
+    0;
+
+}
+
+
+.lamp-room.day .light-core {
+
+  opacity:
+    0;
+
+}
+
+
+.lamp-room.day .glow {
+
+  opacity:
+    0;
+
+  transform:
+    translate(
+      -50%,
+      -50%
+    )
+    scale(.72);
 
 }
 
@@ -360,50 +394,41 @@ body {
    DUSK
    ================================================== */
 
-.lamp-room.dusk .glow {
-
-  opacity: .38;
-
-  transform:
-    translate(-50%, -50%)
-    scale(.88);
-
-}
-
-
-.lamp-room.dusk::after {
-
-  opacity: .055;
-
-}
-
-
-.lamp-room.dusk .inner-light {
-
-  opacity: .25;
-
-}
-
-
-.lamp-room.dusk .inner-warmth {
-
-  opacity: .10;
-
-}
-
-
 .lamp-room.dusk .lamp {
 
   filter:
+    brightness(1.025);
 
-    brightness(1.035)
+}
 
-    saturate(1.03)
 
-    drop-shadow(
-      0 0 6px
-      rgba(249, 128, 33, .25)
-    );
+.lamp-room.dusk .lamp-light {
+
+  opacity:
+    .18;
+
+}
+
+
+.lamp-room.dusk .light-core {
+
+  opacity:
+    .18;
+
+}
+
+
+.lamp-room.dusk .glow {
+
+  opacity:
+    .40;
+
+  transform:
+    translate(
+      -50%,
+      -50%
+    )
+    scale(.88);
 
 }
 
@@ -412,56 +437,46 @@ body {
    NIGHT
    ================================================== */
 
-.lamp-room.lit .glow {
-
-  opacity: .95;
-
-  transform:
-    translate(-50%, -50%)
-    scale(1.08);
-
-}
-
-
-.lamp-room.lit::after {
-
-  opacity: .16;
-
-}
-
-
-.lamp-room.lit .inner-light {
-
-  opacity: .72;
-
-}
-
-
-.lamp-room.lit .inner-warmth {
-
-  opacity: .20;
-
-}
-
-
 .lamp-room.lit .lamp {
 
   /*
-     A little brightness is intentional now.
-     Enough to make the paper feel illuminated,
-     but not enough to erase its texture.
+     Slight brightness increase gives the paper
+     the feeling of being illuminated.
   */
 
   filter:
+    brightness(1.10);
 
-    brightness(1.10)
+}
 
-    saturate(1.06)
 
-    drop-shadow(
-      0 0 10px
-      rgba(249, 128, 33, .42)
-    );
+.lamp-room.lit .lamp-light {
+
+  opacity:
+    .58;
+
+}
+
+
+.lamp-room.lit .light-core {
+
+  opacity:
+    .62;
+
+}
+
+
+.lamp-room.lit .glow {
+
+  opacity:
+    .90;
+
+  transform:
+    translate(
+      -50%,
+      -50%
+    )
+    scale(1.05);
 
 }
 
@@ -482,16 +497,22 @@ body {
 
   .glow {
 
-    width: 34%;
-    height: 65%;
+    width:
+      36%;
+
+    height:
+      68%;
 
   }
 
 
-  .lamp-room::after {
+  .light-core {
 
-    width: 32%;
-    height: 60%;
+    width:
+      38%;
+
+    height:
+      50%;
 
   }
 
@@ -504,22 +525,29 @@ body {
 
 .controls {
 
-  position: absolute;
+  position:
+    absolute;
 
-  bottom: 10px;
+  bottom:
+    10px;
 
-  left: 50%;
+  left:
+    50%;
 
   transform:
     translateX(-50%);
 
-  z-index: 20;
+  z-index:
+    20;
 
-  display: flex;
+  display:
+    flex;
 
-  gap: 7px;
+  gap:
+    7px;
 
-  opacity: .45;
+  opacity:
+    .45;
 
   transition:
     opacity .25s ease;
@@ -528,43 +556,58 @@ body {
 
 
 .controls:hover {
-  opacity: .9;
+
+  opacity:
+    .9;
+
 }
 
 
 .controls button {
 
-  border: none;
+  border:
+    none;
 
-  background: transparent;
+  background:
+    transparent;
 
-  padding: 3px 5px;
+  padding:
+    3px 5px;
 
   font-family:
     Arial,
     sans-serif;
 
-  font-size: 7px;
+  font-size:
+    7px;
 
-  letter-spacing: .13em;
+  letter-spacing:
+    .13em;
 
-  color: #575149;
+  color:
+    #575149;
 
-  cursor: pointer;
+  cursor:
+    pointer;
 
 }
 
 
 .controls button:hover {
-  color: #24211e;
+
+  color:
+    #24211e;
+
 }
 
 
 .controls button.active {
 
-  text-decoration: underline;
+  text-decoration:
+    underline;
 
-  text-underline-offset: 3px;
+  text-underline-offset:
+    3px;
 
 }
 
@@ -582,7 +625,7 @@ body {
 >
 
 
-  <!-- VERTICAL LIGHT -->
+  <!-- OUTER GLOW -->
 
   <div
     class="glow"
@@ -590,9 +633,12 @@ body {
   ></div>
 
 
-  <!-- AKARI -->
+  <!-- LAMP -->
 
   <div class="lamp-wrapper">
+
+
+    <!-- ORIGINAL PAPER -->
 
     <img
       src="lamp.png"
@@ -601,20 +647,22 @@ body {
     >
 
 
-    <!-- INTERNAL LIGHT -->
+    <!-- LUMINOUS COPY -->
+
+    <img
+      src="lamp.png"
+      class="lamp-light"
+      alt=""
+    >
+
+
+    <!-- INTERNAL LIGHT CORE -->
 
     <div
-      class="inner-light"
+      class="light-core"
       aria-hidden="true"
     ></div>
 
-
-    <!-- SOFT WARMTH -->
-
-    <div
-      class="inner-warmth"
-      aria-hidden="true"
-    ></div>
 
   </div>
 
@@ -710,7 +758,7 @@ const buttons = {
 
 
 /* ==================================================
-   SUNSET
+   SUNSET CALCULATION
    ================================================== */
 
 function getSunset(date) {
