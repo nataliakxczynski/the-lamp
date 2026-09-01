@@ -107,11 +107,13 @@ body {
   position: absolute;
 
   width: min(55%, 220px);
+
   aspect-ratio: 1;
 
   border-radius: 50%;
 
   background:
+
     radial-gradient(
       circle,
       var(--warm-light) 0%,
@@ -138,7 +140,56 @@ body {
 
 
 /* ==================================================
-   LIGHT ON
+   DAY
+   ================================================== */
+
+.lamp-room.day .glow {
+
+  opacity: 0;
+
+  transform:
+    scale(.75);
+
+}
+
+
+.lamp-room.day .lamp {
+
+  filter:
+    none;
+
+}
+
+
+/* ==================================================
+   DUSK
+   ================================================== */
+
+.lamp-room.dusk .glow {
+
+  opacity: .35;
+
+  transform:
+    scale(.92);
+
+}
+
+
+.lamp-room.dusk .lamp {
+
+  filter:
+    brightness(1.035)
+    sepia(.055)
+    drop-shadow(
+      0 0 5px
+      rgba(255, 211, 145, .12)
+    );
+
+}
+
+
+/* ==================================================
+   NIGHT
    ================================================== */
 
 .lamp-room.lit .glow {
@@ -154,35 +205,109 @@ body {
 .lamp-room.lit .lamp {
 
   filter:
-    brightness(1.08)
-    sepia(.10)
+    brightness(1.10)
+    sepia(.12)
     drop-shadow(
-      0 0 12px
-      rgba(255, 211, 145, .28)
+      0 0 13px
+      rgba(255, 211, 145, .32)
     );
 
 }
 
 
 /* ==================================================
-   TRANSITION / DUSK
+   TEST CONTROLS
    ================================================== */
 
-.lamp-room.dusk .glow {
+.controls {
 
-  opacity: .35;
+  position:
+    absolute;
+
+  bottom:
+    10px;
+
+  left:
+    50%;
 
   transform:
-    scale(.90);
+    translateX(-50%);
+
+  z-index:
+    10;
+
+  display:
+    flex;
+
+  gap:
+    7px;
+
+  opacity:
+    .45;
+
+  transition:
+    opacity .25s ease;
 
 }
 
 
-.lamp-room.dusk .lamp {
+.controls:hover {
 
-  filter:
-    brightness(1.03)
-    sepia(.04);
+  opacity:
+    .9;
+
+}
+
+
+.controls button {
+
+  border:
+    none;
+
+  background:
+    transparent;
+
+  padding:
+    3px 5px;
+
+  font-family:
+    Arial,
+    sans-serif;
+
+  font-size:
+    7px;
+
+  letter-spacing:
+    .13em;
+
+  color:
+    #575149;
+
+  cursor:
+    pointer;
+
+}
+
+
+.controls button:hover {
+
+  color:
+    #24211e;
+
+}
+
+
+/* ==================================================
+   ACTIVE BUTTON
+   ================================================== */
+
+.controls button.active {
+
+  text-decoration:
+    underline;
+
+  text-underline-offset:
+    3px;
 
 }
 
@@ -207,6 +332,13 @@ body {
 
   }
 
+  .controls {
+
+    bottom:
+      7px;
+
+  }
+
 }
 
 </style>
@@ -218,7 +350,7 @@ body {
 
 
 <div
-  class="lamp-room"
+  class="lamp-room day"
   id="lampRoom"
 >
 
@@ -231,13 +363,54 @@ body {
   ></div>
 
 
-  <!-- YOUR PNG -->
+  <!-- LAMP -->
 
   <img
     src="lamp.png"
     class="lamp"
     alt=""
   >
+
+
+  <!-- TEST CONTROLS -->
+
+  <div
+    class="controls"
+  >
+
+    <button
+      id="dayButton"
+      onclick="setMode('day')"
+    >
+      DAY
+    </button>
+
+
+    <button
+      id="duskButton"
+      onclick="setMode('dusk')"
+    >
+      DUSK
+    </button>
+
+
+    <button
+      id="nightButton"
+      onclick="setMode('night')"
+    >
+      NIGHT
+    </button>
+
+
+    <button
+      id="autoButton"
+      onclick="setMode('auto')"
+      class="active"
+    >
+      AUTO
+    </button>
+
+  </div>
 
 
 </div>
@@ -257,15 +430,42 @@ const LONGITUDE =
 
 
 /* ==================================================
-   ELEMENT
+   ELEMENTS
    ================================================== */
 
 const lampRoom =
-  document.getElementById("lampRoom");
+  document.getElementById(
+    "lampRoom"
+  );
+
+
+const buttons = {
+
+  day:
+    document.getElementById(
+      "dayButton"
+    ),
+
+  dusk:
+    document.getElementById(
+      "duskButton"
+    ),
+
+  night:
+    document.getElementById(
+      "nightButton"
+    ),
+
+  auto:
+    document.getElementById(
+      "autoButton"
+    )
+
+};
 
 
 /* ==================================================
-   APPROXIMATE SUNSET
+   SUNSET CALCULATION
    ================================================== */
 
 function getSunset(date) {
@@ -309,29 +509,31 @@ function getSunset(date) {
     Math.acos(
 
       (
-        Math.cos(90.833 * radians)
+        Math.cos(
+          90.833 * radians
+        )
         /
         (
-          Math.cos(LATITUDE * radians)
+          Math.cos(
+            LATITUDE * radians
+          )
           *
-          Math.cos(declination * radians)
+          Math.cos(
+            declination * radians
+          )
         )
       )
       -
-      Math.tan(LATITUDE * radians)
+      Math.tan(
+        LATITUDE * radians
+      )
       *
-      Math.tan(declination * radians)
+      Math.tan(
+        declination * radians
+      )
 
     ) / radians;
 
-
-  /*
-     Barcelona is approximately UTC+1
-     in winter and UTC+2 in summer.
-
-     The browser's local timezone handles
-     the actual display time.
-  */
 
   const solarNoon =
     12
@@ -354,12 +556,18 @@ function getSunset(date) {
 
 
   sunset.setHours(
-    Math.floor(sunsetHour),
+    Math.floor(
+      sunsetHour
+    ),
     Math.round(
       (
-        sunsetHour -
-        Math.floor(sunsetHour)
-      ) * 60
+        sunsetHour
+        -
+        Math.floor(
+          sunsetHour
+        )
+      )
+      * 60
     ),
     0,
     0
@@ -372,10 +580,66 @@ function getSunset(date) {
 
 
 /* ==================================================
-   UPDATE LAMP
+   APPLY MODE
    ================================================== */
 
-function updateLamp() {
+function applyMode(mode) {
+
+  lampRoom.classList.remove(
+    "day",
+    "dusk",
+    "lit"
+  );
+
+
+  if (mode === "day") {
+
+    lampRoom.classList.add(
+      "day"
+    );
+
+  }
+
+
+  if (mode === "dusk") {
+
+    lampRoom.classList.add(
+      "dusk"
+    );
+
+  }
+
+
+  if (mode === "night") {
+
+    lampRoom.classList.add(
+      "lit"
+    );
+
+  }
+
+
+  Object.keys(buttons)
+    .forEach(
+      key => {
+
+        buttons[key]
+          .classList.toggle(
+            "active",
+            key === mode
+          );
+
+      }
+    );
+
+}
+
+
+/* ==================================================
+   REAL TIME MODE
+   ================================================== */
+
+function updateAuto() {
 
   const now =
     new Date();
@@ -385,14 +649,6 @@ function updateLamp() {
     getSunset(now);
 
 
-  /*
-     DUSK:
-     45 minutes before sunset
-
-     LIT:
-     sunset onwards
-  */
-
   const duskStart =
     new Date(
       sunset.getTime()
@@ -401,24 +657,51 @@ function updateLamp() {
     );
 
 
-  lampRoom.classList.remove(
-    "dusk",
-    "lit"
-  );
-
-
   if (now >= sunset) {
 
-    lampRoom.classList.add(
-      "lit"
+    applyMode(
+      "night"
     );
 
   }
 
-  else if (now >= duskStart) {
+  else if (
+    now >= duskStart
+  ) {
 
-    lampRoom.classList.add(
+    applyMode(
       "dusk"
+    );
+
+  }
+
+  else {
+
+    applyMode(
+      "day"
+    );
+
+  }
+
+}
+
+
+/* ==================================================
+   PUBLIC TEST FUNCTION
+   ================================================== */
+
+function setMode(mode) {
+
+  if (mode === "auto") {
+
+    updateAuto();
+
+  }
+
+  else {
+
+    applyMode(
+      mode
     );
 
   }
@@ -430,11 +713,30 @@ function updateLamp() {
    START
    ================================================== */
 
-updateLamp();
+updateAuto();
 
+
+/*
+   Keep AUTO synchronized
+   with real time.
+*/
 
 setInterval(
-  updateLamp,
+  () => {
+
+    const autoButton =
+      buttons.auto;
+
+    if (
+      autoButton.classList
+        .contains("active")
+    ) {
+
+      updateAuto();
+
+    }
+
+  },
   60000
 );
 
