@@ -17,14 +17,13 @@
 
 /* ==================================================
    PAPER LAMP
-   Transparent Notion Widget
-   Barcelona
+   Warm / Concentrated Light
    ================================================== */
 
 :root {
 
-  --warm-light:
-    rgba(255, 213, 143, 0.75);
+  --amber:
+    rgba(255, 132, 45, 0.45);
 
 }
 
@@ -34,20 +33,36 @@
    ================================================== */
 
 * {
-  box-sizing: border-box;
+  box-sizing:
+    border-box;
 }
 
 
 html,
 body {
 
-  width: 100%;
-  height: 100%;
+  width:
+    100%;
 
-  margin: 0;
-  padding: 0;
+  height:
+    100%;
 
-  background: transparent;
+  margin:
+    0;
+
+  padding:
+    0;
+
+  background:
+    transparent;
+
+}
+
+
+body {
+
+  overflow:
+    hidden;
 
 }
 
@@ -58,21 +73,32 @@ body {
 
 .lamp-room {
 
-  position: relative;
+  position:
+    relative;
 
-  width: 100%;
-  height: 100%;
+  width:
+    100%;
 
-  min-height: 180px;
+  height:
+    100%;
 
-  display: flex;
+  min-height:
+    180px;
 
-  align-items: center;
-  justify-content: center;
+  display:
+    flex;
 
-  overflow: hidden;
+  align-items:
+    center;
 
-  background: transparent;
+  justify-content:
+    center;
+
+  overflow:
+    hidden;
+
+  background:
+    transparent;
 
 }
 
@@ -83,13 +109,17 @@ body {
 
 .lamp {
 
-  position: relative;
+  position:
+    relative;
 
-  width: min(62%, 260px);
+  width:
+    min(62%, 260px);
 
-  display: block;
+  display:
+    block;
 
-  z-index: 2;
+  z-index:
+    2;
 
   transition:
     filter 3s ease,
@@ -99,42 +129,48 @@ body {
 
 
 /* ==================================================
-   LIGHT GLOW
+   CONCENTRATED LIGHT
    ================================================== */
 
 .glow {
 
-  position: absolute;
+  position:
+    absolute;
 
-  width: min(55%, 220px);
+  width:
+    min(32%, 125px);
 
-  aspect-ratio: 1;
+  aspect-ratio:
+    1;
 
-  border-radius: 50%;
+  border-radius:
+    50%;
 
   background:
 
     radial-gradient(
       circle,
-      var(--warm-light) 0%,
-      rgba(255, 205, 125, 0.28) 28%,
-      rgba(255, 190, 100, 0.10) 48%,
-      transparent 72%
+      rgba(255, 133, 45, .28) 0%,
+      rgba(255, 117, 32, .13) 35%,
+      rgba(255, 100, 20, .04) 58%,
+      transparent 75%
     );
 
   filter:
-    blur(14px);
+    blur(9px);
 
-  opacity: 0;
+  opacity:
+    0;
 
-  z-index: 1;
+  z-index:
+    1;
 
   transform:
     scale(.75);
 
   transition:
-    opacity 4s ease,
-    transform 5s ease;
+    opacity 3s ease,
+    transform 4s ease;
 
 }
 
@@ -145,7 +181,8 @@ body {
 
 .lamp-room.day .glow {
 
-  opacity: 0;
+  opacity:
+    0;
 
   transform:
     scale(.75);
@@ -167,10 +204,11 @@ body {
 
 .lamp-room.dusk .glow {
 
-  opacity: .35;
+  opacity:
+    .42;
 
   transform:
-    scale(.92);
+    scale(.88);
 
 }
 
@@ -178,11 +216,16 @@ body {
 .lamp-room.dusk .lamp {
 
   filter:
+
     brightness(1.035)
-    sepia(.055)
+
+    sepia(.16)
+
+    saturate(1.12)
+
     drop-shadow(
       0 0 5px
-      rgba(255, 211, 145, .12)
+      rgba(255, 120, 35, .20)
     );
 
 }
@@ -194,10 +237,11 @@ body {
 
 .lamp-room.lit .glow {
 
-  opacity: 1;
+  opacity:
+    .85;
 
   transform:
-    scale(1.15);
+    scale(1);
 
 }
 
@@ -205,11 +249,16 @@ body {
 .lamp-room.lit .lamp {
 
   filter:
-    brightness(1.10)
-    sepia(.12)
+
+    brightness(1.09)
+
+    sepia(.28)
+
+    saturate(1.28)
+
     drop-shadow(
-      0 0 13px
-      rgba(255, 211, 145, .32)
+      0 0 8px
+      rgba(255, 112, 30, .32)
     );
 
 }
@@ -297,10 +346,6 @@ body {
 }
 
 
-/* ==================================================
-   ACTIVE BUTTON
-   ================================================== */
-
 .controls button.active {
 
   text-decoration:
@@ -325,17 +370,11 @@ body {
 
   }
 
+
   .glow {
 
     width:
-      65%;
-
-  }
-
-  .controls {
-
-    bottom:
-      7px;
+      38%;
 
   }
 
@@ -355,7 +394,7 @@ body {
 >
 
 
-  <!-- LIGHT -->
+  <!-- CONCENTRATED LIGHT -->
 
   <div
     class="glow"
@@ -374,9 +413,7 @@ body {
 
   <!-- TEST CONTROLS -->
 
-  <div
-    class="controls"
-  >
+  <div class="controls">
 
     <button
       id="dayButton"
@@ -430,7 +467,7 @@ const LONGITUDE =
 
 
 /* ==================================================
-   ELEMENTS
+   ELEMENT
    ================================================== */
 
 const lampRoom =
@@ -465,7 +502,7 @@ const buttons = {
 
 
 /* ==================================================
-   SUNSET CALCULATION
+   SUNSET
    ================================================== */
 
 function getSunset(date) {
@@ -556,16 +593,12 @@ function getSunset(date) {
 
 
   sunset.setHours(
-    Math.floor(
-      sunsetHour
-    ),
+    Math.floor(sunsetHour),
     Math.round(
       (
         sunsetHour
         -
-        Math.floor(
-          sunsetHour
-        )
+        Math.floor(sunsetHour)
       )
       * 60
     ),
@@ -636,7 +669,7 @@ function applyMode(mode) {
 
 
 /* ==================================================
-   REAL TIME MODE
+   AUTO
    ================================================== */
 
 function updateAuto() {
@@ -687,12 +720,14 @@ function updateAuto() {
 
 
 /* ==================================================
-   PUBLIC TEST FUNCTION
+   TEST MODE
    ================================================== */
 
 function setMode(mode) {
 
-  if (mode === "auto") {
+  if (
+    mode === "auto"
+  ) {
 
     updateAuto();
 
@@ -716,19 +751,12 @@ function setMode(mode) {
 updateAuto();
 
 
-/*
-   Keep AUTO synchronized
-   with real time.
-*/
-
 setInterval(
   () => {
 
-    const autoButton =
-      buttons.auto;
-
     if (
-      autoButton.classList
+      buttons.auto
+        .classList
         .contains("active")
     ) {
 
