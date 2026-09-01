@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
+<title>Lamp</title>
+
+
+<style>
+
+/* ==================================================
+   PAPER LAMP
+   Transparent Notion Widget
+   Barcelona
+   ================================================== */
+
+:root {
+
+  --warm-light:
+    rgba(255, 213, 143, 0.75);
+
+}
+
+
+/* ==================================================
+   RESET
+   ================================================== */
+
+* {
+  box-sizing: border-box;
+}
+
+
+html,
+body {
+
+  width: 100%;
+  height: 100%;
+
+  margin: 0;
+  padding: 0;
+
+  background: transparent;
+
+}
+
+
+/* ==================================================
+   LAMP AREA
+   ================================================== */
+
+.lamp-room {
+
+  position: relative;
+
+  width: 100%;
+  height: 100%;
+
+  min-height: 180px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+
+  background: transparent;
+
+}
+
+
+/* ==================================================
+   LAMP
+   ================================================== */
+
+.lamp {
+
+  position: relative;
+
+  width: min(62%, 260px);
+
+  display: block;
+
+  z-index: 2;
+
+  transition:
+    filter 3s ease,
+    transform 3s ease;
+
+}
+
+
+/* ==================================================
+   LIGHT GLOW
+   ================================================== */
+
+.glow {
+
+  position: absolute;
+
+  width: min(55%, 220px);
+  aspect-ratio: 1;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      var(--warm-light) 0%,
+      rgba(255, 205, 125, 0.28) 28%,
+      rgba(255, 190, 100, 0.10) 48%,
+      transparent 72%
+    );
+
+  filter:
+    blur(14px);
+
+  opacity: 0;
+
+  z-index: 1;
+
+  transform:
+    scale(.75);
+
+  transition:
+    opacity 4s ease,
+    transform 5s ease;
+
+}
+
+
+/* ==================================================
+   LIGHT ON
+   ================================================== */
+
+.lamp-room.lit .glow {
+
+  opacity: 1;
+
+  transform:
+    scale(1.15);
+
+}
+
+
+.lamp-room.lit .lamp {
+
+  filter:
+    brightness(1.08)
+    sepia(.10)
+    drop-shadow(
+      0 0 12px
+      rgba(255, 211, 145, .28)
+    );
+
+}
+
+
+/* ==================================================
+   TRANSITION / DUSK
+   ================================================== */
+
+.lamp-room.dusk .glow {
+
+  opacity: .35;
+
+  transform:
+    scale(.90);
+
+}
+
+
+.lamp-room.dusk .lamp {
+
+  filter:
+    brightness(1.03)
+    sepia(.04);
+
+}
+
+
+/* ==================================================
+   MOBILE
+   ================================================== */
+
+@media (max-width: 420px) {
+
+  .lamp {
+
+    width:
+      min(70%, 220px);
+
+  }
+
+  .glow {
+
+    width:
+      65%;
+
+  }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div
+  class="lamp-room"
+  id="lampRoom"
+>
+
+
+  <!-- LIGHT -->
+
+  <div
+    class="glow"
+    aria-hidden="true"
+  ></div>
+
+
+  <!-- YOUR PNG -->
+
+  <img
+    src="lamp.png"
+    class="lamp"
+    alt=""
+  >
+
+
+</div>
+
+
+<script>
+
+/* ==================================================
+   BARCELONA
+   ================================================== */
+
+const LATITUDE =
+  41.3874;
+
+const LONGITUDE =
+  2.1686;
+
+
+/* ==================================================
+   ELEMENT
+   ================================================== */
+
+const lampRoom =
+  document.getElementById("lampRoom");
+
+
+/* ==================================================
+   APPROXIMATE SUNSET
+   ================================================== */
+
+function getSunset(date) {
+
+  const day =
+    Math.floor(
+      (
+        Date.UTC(
+          date.getFullYear(),
+          date.getMonth(),
+          date.getDate()
+        )
+        -
+        Date.UTC(
+          date.getFullYear(),
+          0,
+          0
+        )
+      )
+      /
+      86400000
+    );
+
+
+  const radians =
+    Math.PI / 180;
+
+
+  const declination =
+    -23.44 *
+    Math.cos(
+      radians *
+      (
+        360 / 365 *
+        (day + 10)
+      )
+    );
+
+
+  const hourAngle =
+    Math.acos(
+
+      (
+        Math.cos(90.833 * radians)
+        /
+        (
+          Math.cos(LATITUDE * radians)
+          *
+          Math.cos(declination * radians)
+        )
+      )
+      -
+      Math.tan(LATITUDE * radians)
+      *
+      Math.tan(declination * radians)
+
+    ) / radians;
+
+
+  /*
+     Barcelona is approximately UTC+1
+     in winter and UTC+2 in summer.
+
+     The browser's local timezone handles
+     the actual display time.
+  */
+
+  const solarNoon =
+    12
+    -
+    (
+      LONGITUDE / 15
+    );
+
+
+  const sunsetHour =
+    solarNoon
+    +
+    (
+      hourAngle / 15
+    );
+
+
+  const sunset =
+    new Date(date);
+
+
+  sunset.setHours(
+    Math.floor(sunsetHour),
+    Math.round(
+      (
+        sunsetHour -
+        Math.floor(sunsetHour)
+      ) * 60
+    ),
+    0,
+    0
+  );
+
+
+  return sunset;
+
+}
+
+
+/* ==================================================
+   UPDATE LAMP
+   ================================================== */
+
+function updateLamp() {
+
+  const now =
+    new Date();
+
+
+  const sunset =
+    getSunset(now);
+
+
+  /*
+     DUSK:
+     45 minutes before sunset
+
+     LIT:
+     sunset onwards
+  */
+
+  const duskStart =
+    new Date(
+      sunset.getTime()
+      -
+      45 * 60 * 1000
+    );
+
+
+  lampRoom.classList.remove(
+    "dusk",
+    "lit"
+  );
+
+
+  if (now >= sunset) {
+
+    lampRoom.classList.add(
+      "lit"
+    );
+
+  }
+
+  else if (now >= duskStart) {
+
+    lampRoom.classList.add(
+      "dusk"
+    );
+
+  }
+
+}
+
+
+/* ==================================================
+   START
+   ================================================== */
+
+updateLamp();
+
+
+setInterval(
+  updateLamp,
+  60000
+);
+
+</script>
+
+
+</body>
+
+</html>
+```
