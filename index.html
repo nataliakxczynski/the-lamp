@@ -16,7 +16,8 @@
 <style>
 
 /* ==================================================
-   AKARI PAPER LAMP
+   PAPER LAMP
+   Akari-inspired / Warm Orange Interior
    ================================================== */
 
 :root {
@@ -121,7 +122,7 @@ body {
 
 
 /* ==================================================
-   ORIGINAL PAPER
+   ORIGINAL LAMP
    ================================================== */
 
 .lamp {
@@ -148,16 +149,14 @@ body {
 
 
 /* ==================================================
-   LUMINOUS COPY
+   INNER ORANGE LAYER
    ==================================================
 
-   This is a second copy of the actual lamp.
-
-   It follows exactly the same silhouette,
-   so the light appears INSIDE the lamp.
+   This layer uses the PNG itself as a mask,
+   so the orange remains inside the lamp.
    ================================================== */
 
-.lamp-light {
+.inner-light {
 
   position:
     absolute;
@@ -165,42 +164,44 @@ body {
   inset:
     0;
 
-  width:
-    100%;
-
-  height:
-    100%;
-
-  object-fit:
-    contain;
-
   z-index:
     4;
 
   pointer-events:
     none;
 
+  background:
+    var(--orange);
+
   opacity:
     0;
 
-  /*
-     Orange light added to the actual silhouette.
-  */
-
-  filter:
-
-    sepia(1)
-
-    saturate(7)
-
-    hue-rotate(
-      325deg
-    )
-
-    brightness(1.35);
-
   mix-blend-mode:
-    screen;
+    multiply;
+
+  -webkit-mask-image:
+    url("lamp.png");
+
+  mask-image:
+    url("lamp.png");
+
+  -webkit-mask-repeat:
+    no-repeat;
+
+  mask-repeat:
+    no-repeat;
+
+  -webkit-mask-position:
+    center;
+
+  mask-position:
+    center;
+
+  -webkit-mask-size:
+    contain;
+
+  mask-size:
+    contain;
 
   transition:
     opacity 3s ease;
@@ -209,62 +210,19 @@ body {
 
 
 /* ==================================================
-   INTERNAL LIGHT CORE
+   SECOND INNER LIGHT
    ==================================================
 
-   A small concentrated warm area gives the
-   impression of an actual bulb/light source
-   rather than simply colouring the paper.
+   A softer layer gives the paper some warmth
+   without destroying the texture.
    ================================================== */
 
-.light-core {
+.inner-warmth {
 
   position:
     absolute;
 
-  left:
-    50%;
-
-  top:
-    50%;
-
-  width:
-    35%;
-
-  height:
-    48%;
-
-  transform:
-    translate(
-      -50%,
-      -50%
-    );
-
-  border-radius:
-    50%;
-
-  background:
-
-    radial-gradient(
-      ellipse,
-
-      rgba(255, 185, 95, .58)
-      0%,
-
-      rgba(249, 128, 33, .30)
-      30%,
-
-      rgba(249, 128, 33, .10)
-      58%,
-
-      transparent
-      80%
-    );
-
-  filter:
-    blur(10px);
-
-  opacity:
+  inset:
     0;
 
   z-index:
@@ -273,6 +231,39 @@ body {
   pointer-events:
     none;
 
+  background:
+    rgba(249, 128, 33, .55);
+
+  opacity:
+    0;
+
+  mix-blend-mode:
+    soft-light;
+
+  -webkit-mask-image:
+    url("lamp.png");
+
+  mask-image:
+    url("lamp.png");
+
+  -webkit-mask-repeat:
+    no-repeat;
+
+  mask-repeat:
+    no-repeat;
+
+  -webkit-mask-position:
+    center;
+
+  mask-position:
+    center;
+
+  -webkit-mask-size:
+    contain;
+
+  mask-size:
+    contain;
+
   transition:
     opacity 3s ease;
 
@@ -280,7 +271,7 @@ body {
 
 
 /* ==================================================
-   OUTER GLOW
+   CONCENTRATED OUTER LIGHT
    ================================================== */
 
 .glow {
@@ -289,23 +280,10 @@ body {
     absolute;
 
   width:
-    31%;
+    min(30%, 120px);
 
-  height:
-    65%;
-
-  left:
-    50%;
-
-  top:
-    50%;
-
-  transform:
-    translate(
-      -50%,
-      -50%
-    )
-    scale(.72);
+  aspect-ratio:
+    1;
 
   border-radius:
     50%;
@@ -313,32 +291,32 @@ body {
   background:
 
     radial-gradient(
-      ellipse at center,
+      circle,
 
-      rgba(249, 128, 33, .48)
+      rgba(249, 128, 33, .26)
       0%,
 
-      rgba(249, 128, 33, .27)
-      28%,
+      rgba(249, 128, 33, .12)
+      30%,
 
-      rgba(249, 128, 33, .10)
-      48%,
-
-      rgba(249, 128, 33, .025)
-      65%,
+      rgba(249, 128, 33, .035)
+      52%,
 
       transparent
-      78%
+      70%
     );
 
   filter:
-    blur(10px);
+    blur(8px);
 
   opacity:
     0;
 
   z-index:
     1;
+
+  transform:
+    scale(.72);
 
   transition:
     opacity 3s ease,
@@ -351,6 +329,30 @@ body {
    DAY
    ================================================== */
 
+.lamp-room.day .glow {
+
+  opacity:
+    0;
+
+}
+
+
+.lamp-room.day .inner-light {
+
+  opacity:
+    0;
+
+}
+
+
+.lamp-room.day .inner-warmth {
+
+  opacity:
+    0;
+
+}
+
+
 .lamp-room.day .lamp {
 
   filter:
@@ -359,76 +361,46 @@ body {
 }
 
 
-.lamp-room.day .lamp-light {
-
-  opacity:
-    0;
-
-}
-
-
-.lamp-room.day .light-core {
-
-  opacity:
-    0;
-
-}
-
-
-.lamp-room.day .glow {
-
-  opacity:
-    0;
-
-  transform:
-    translate(
-      -50%,
-      -50%
-    )
-    scale(.72);
-
-}
-
-
 /* ==================================================
    DUSK
    ================================================== */
 
-.lamp-room.dusk .lamp {
-
-  filter:
-    brightness(1.025);
-
-}
-
-
-.lamp-room.dusk .lamp-light {
-
-  opacity:
-    .18;
-
-}
-
-
-.lamp-room.dusk .light-core {
-
-  opacity:
-    .18;
-
-}
-
-
 .lamp-room.dusk .glow {
 
   opacity:
-    .40;
+    .38;
 
   transform:
-    translate(
-      -50%,
-      -50%
-    )
     scale(.88);
+
+}
+
+
+.lamp-room.dusk .inner-light {
+
+  opacity:
+    .18;
+
+}
+
+
+.lamp-room.dusk .inner-warmth {
+
+  opacity:
+    .10;
+
+}
+
+
+.lamp-room.dusk .lamp {
+
+  filter:
+    saturate(1.08)
+    sepia(.08)
+    drop-shadow(
+      0 0 4px
+      rgba(249, 128, 33, .18)
+    );
 
 }
 
@@ -437,52 +409,106 @@ body {
    NIGHT
    ================================================== */
 
-.lamp-room.lit .lamp {
-
-  /*
-     Slight brightness increase gives the paper
-     the feeling of being illuminated.
-  */
-
-  filter:
-    brightness(1.10);
-
-}
-
-
-.lamp-room.lit .lamp-light {
-
-  opacity:
-    .58;
-
-}
-
-
-.lamp-room.lit .light-core {
-
-  opacity:
-    .62;
-
-}
-
-
 .lamp-room.lit .glow {
 
   opacity:
-    .90;
+    .72;
 
   transform:
-    translate(
-      -50%,
-      -50%
-    )
-    scale(1.05);
+    scale(.98);
+
+}
+
+
+.lamp-room.lit .inner-light {
+
+  opacity:
+    .32;
+
+}
+
+
+.lamp-room.lit .inner-warmth {
+
+  opacity:
+    .18;
+
+}
+
+
+.lamp-room.lit .lamp {
+
+  filter:
+
+    saturate(1.22)
+
+    sepia(.18)
+
+    drop-shadow(
+      0 0 7px
+      rgba(249, 128, 33, .28)
+    );
 
 }
 
 
 /* ==================================================
-   RESPONSIVE
+   SUBTLE OUTER AMBIENT LIGHT
+   ================================================== */
+
+.lamp-room::after {
+
+  content:
+    "";
+
+  position:
+    absolute;
+
+  width:
+    min(20%, 80px);
+
+  aspect-ratio:
+    1;
+
+  border-radius:
+    50%;
+
+  background:
+    var(--orange);
+
+  filter:
+    blur(24px);
+
+  opacity:
+    0;
+
+  z-index:
+    1;
+
+  transition:
+    opacity 3s ease;
+
+}
+
+
+.lamp-room.dusk::after {
+
+  opacity:
+    .06;
+
+}
+
+
+.lamp-room.lit::after {
+
+  opacity:
+    .12;
+
+}
+
+
+/* ==================================================
+   LAMP SIZE ON SMALL SCREENS
    ================================================== */
 
 @media (max-width: 420px) {
@@ -499,20 +525,6 @@ body {
 
     width:
       36%;
-
-    height:
-      68%;
-
-  }
-
-
-  .light-core {
-
-    width:
-      38%;
-
-    height:
-      50%;
 
   }
 
@@ -625,7 +637,7 @@ body {
 >
 
 
-  <!-- OUTER GLOW -->
+  <!-- OUTER LIGHT -->
 
   <div
     class="glow"
@@ -637,9 +649,6 @@ body {
 
   <div class="lamp-wrapper">
 
-
-    <!-- ORIGINAL PAPER -->
-
     <img
       src="lamp.png"
       class="lamp"
@@ -647,22 +656,20 @@ body {
     >
 
 
-    <!-- LUMINOUS COPY -->
-
-    <img
-      src="lamp.png"
-      class="lamp-light"
-      alt=""
-    >
-
-
-    <!-- INTERNAL LIGHT CORE -->
+    <!-- INNER ORANGE -->
 
     <div
-      class="light-core"
+      class="inner-light"
       aria-hidden="true"
     ></div>
 
+
+    <!-- SOFT WARMTH -->
+
+    <div
+      class="inner-warmth"
+      aria-hidden="true"
+    ></div>
 
   </div>
 
@@ -758,35 +765,28 @@ const buttons = {
 
 
 /* ==================================================
-   SUNSET CALCULATION
+   SUNSET
    ================================================== */
 
 function getSunset(date) {
 
   const day =
     Math.floor(
-
       (
         Date.UTC(
           date.getFullYear(),
           date.getMonth(),
           date.getDate()
         )
-
         -
-
         Date.UTC(
           date.getFullYear(),
           0,
           0
         )
-
       )
-
       /
-
       86400000
-
     );
 
 
@@ -796,16 +796,12 @@ function getSunset(date) {
 
   const declination =
     -23.44 *
-
     Math.cos(
-
       radians *
-
       (
         360 / 365 *
         (day + 10)
       )
-
     );
 
 
@@ -816,52 +812,40 @@ function getSunset(date) {
         Math.cos(
           90.833 * radians
         )
-
         /
-
         (
           Math.cos(
             LATITUDE * radians
           )
-
           *
-
           Math.cos(
             declination * radians
           )
-
         )
-
       )
-
       -
-
       Math.tan(
         LATITUDE * radians
       )
-
       *
-
       Math.tan(
         declination * radians
       )
 
-    )
-
-    /
-
-    radians;
+    ) / radians;
 
 
   const solarNoon =
-    12 -
+    12
+    -
     (
       LONGITUDE / 15
     );
 
 
   const sunsetHour =
-    solarNoon +
+    solarNoon
+    +
     (
       hourAngle / 15
     );
@@ -872,29 +856,21 @@ function getSunset(date) {
 
 
   sunset.setHours(
-
     Math.floor(
       sunsetHour
     ),
-
     Math.round(
-
       (
-        sunsetHour -
-
+        sunsetHour
+        -
         Math.floor(
           sunsetHour
         )
-
       )
-
       * 60
-
     ),
-
     0,
     0
-
   );
 
 
@@ -975,13 +951,9 @@ function updateAuto() {
 
   const duskStart =
     new Date(
-
       sunset.getTime()
-
       -
-
       45 * 60 * 1000
-
     );
 
 
@@ -1047,15 +1019,12 @@ updateAuto();
 
 
 setInterval(
-
   () => {
 
     if (
-
       buttons.auto
         .classList
         .contains("active")
-
     ) {
 
       updateAuto();
@@ -1063,9 +1032,7 @@ setInterval(
     }
 
   },
-
   60000
-
 );
 
 </script>
