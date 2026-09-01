@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 
@@ -17,13 +18,13 @@
 
 /* ==================================================
    PAPER LAMP
-   Warm / Concentrated Light
+   Akari-inspired / Warm Orange Light
    ================================================== */
 
 :root {
 
-  --amber:
-    rgba(255, 132, 45, 0.45);
+  --orange:
+    #f98021;
 
 }
 
@@ -121,9 +122,13 @@ body {
   z-index:
     2;
 
+  /*
+     Keep the original paper texture.
+     We do NOT increase brightness.
+  */
+
   transition:
-    filter 3s ease,
-    transform 3s ease;
+    filter 3s ease;
 
 }
 
@@ -138,7 +143,7 @@ body {
     absolute;
 
   width:
-    min(32%, 125px);
+    min(30%, 120px);
 
   aspect-ratio:
     1;
@@ -146,18 +151,31 @@ body {
   border-radius:
     50%;
 
+  /*
+     Strong orange centre,
+     fading very quickly.
+  */
+
   background:
 
     radial-gradient(
       circle,
-      rgba(255, 133, 45, .28) 0%,
-      rgba(255, 117, 32, .13) 35%,
-      rgba(255, 100, 20, .04) 58%,
-      transparent 75%
+
+      rgba(249, 128, 33, .32)
+      0%,
+
+      rgba(249, 128, 33, .16)
+      28%,
+
+      rgba(249, 128, 33, .055)
+      48%,
+
+      transparent
+      68%
     );
 
   filter:
-    blur(9px);
+    blur(8px);
 
   opacity:
     0;
@@ -166,7 +184,7 @@ body {
     1;
 
   transform:
-    scale(.75);
+    scale(.72);
 
   transition:
     opacity 3s ease,
@@ -185,7 +203,7 @@ body {
     0;
 
   transform:
-    scale(.75);
+    scale(.72);
 
 }
 
@@ -205,27 +223,30 @@ body {
 .lamp-room.dusk .glow {
 
   opacity:
-    .42;
+    .35;
 
   transform:
-    scale(.88);
+    scale(.86);
 
 }
 
 
 .lamp-room.dusk .lamp {
 
+  /*
+     Very subtle warmth.
+     Paper texture remains untouched.
+  */
+
   filter:
 
-    brightness(1.035)
+    sepia(.10)
 
-    sepia(.16)
-
-    saturate(1.12)
+    saturate(1.08)
 
     drop-shadow(
-      0 0 5px
-      rgba(255, 120, 35, .20)
+      0 0 4px
+      rgba(249, 128, 33, .18)
     );
 
 }
@@ -238,28 +259,93 @@ body {
 .lamp-room.lit .glow {
 
   opacity:
-    .85;
+    .72;
 
   transform:
-    scale(1);
+    scale(.98);
 
 }
 
 
 .lamp-room.lit .lamp {
 
+  /*
+     The image itself stays relatively dark.
+
+     We use colour rather than brightness
+     so the washi texture remains visible.
+  */
+
   filter:
 
-    brightness(1.09)
+    sepia(.24)
 
-    sepia(.28)
-
-    saturate(1.28)
+    saturate(1.34)
 
     drop-shadow(
-      0 0 8px
-      rgba(255, 112, 30, .32)
+      0 0 7px
+      rgba(249, 128, 33, .28)
     );
+
+}
+
+
+/* ==================================================
+   INNER LIGHT
+   ==================================================
+
+   A subtle orange layer sits behind the lamp,
+   giving the impression that the light comes
+   from inside the paper rather than outside it.
+   */
+
+.lamp-room::after {
+
+  content:
+    "";
+
+  position:
+    absolute;
+
+  width:
+    min(24%, 95px);
+
+  aspect-ratio:
+    1;
+
+  border-radius:
+    50%;
+
+  background:
+    var(--orange);
+
+  filter:
+    blur(25px);
+
+  opacity:
+    0;
+
+  z-index:
+    1;
+
+  transition:
+    opacity 3s ease;
+
+}
+
+
+.lamp-room.dusk::after {
+
+  opacity:
+    .10;
+
+}
+
+
+.lamp-room.lit::after {
+
+  opacity:
+    .22;
 
 }
 
@@ -374,7 +460,15 @@ body {
   .glow {
 
     width:
-      38%;
+      36%;
+
+  }
+
+
+  .lamp-room::after {
+
+    width:
+      30%;
 
   }
 
@@ -402,7 +496,7 @@ body {
   ></div>
 
 
-  <!-- LAMP -->
+  <!-- AKARI PNG -->
 
   <img
     src="lamp.png"
@@ -467,7 +561,7 @@ const LONGITUDE =
 
 
 /* ==================================================
-   ELEMENT
+   ELEMENTS
    ================================================== */
 
 const lampRoom =
@@ -502,7 +596,7 @@ const buttons = {
 
 
 /* ==================================================
-   SUNSET
+   SUNSET CALCULATION
    ================================================== */
 
 function getSunset(date) {
@@ -593,12 +687,16 @@ function getSunset(date) {
 
 
   sunset.setHours(
-    Math.floor(sunsetHour),
+    Math.floor(
+      sunsetHour
+    ),
     Math.round(
       (
         sunsetHour
         -
-        Math.floor(sunsetHour)
+        Math.floor(
+          sunsetHour
+        )
       )
       * 60
     ),
@@ -669,7 +767,7 @@ function applyMode(mode) {
 
 
 /* ==================================================
-   AUTO
+   AUTO MODE
    ================================================== */
 
 function updateAuto() {
