@@ -17,7 +17,7 @@
 
 /* ==================================================
    PAPER LAMP
-   Akari-inspired / Warm Orange Interior
+   Akari-inspired / Internal Warm Light
    ================================================== */
 
 :root {
@@ -140,11 +140,11 @@ body {
     block;
 
   z-index:
-    3;
+    5;
 
   /*
-     We deliberately do NOT increase brightness.
-     This keeps the washi paper texture visible.
+     Keep the original paper appearance.
+     We deliberately avoid brightness increases.
   */
 
   transition:
@@ -154,7 +154,16 @@ body {
 
 
 /* ==================================================
-   INNER ORANGE LIGHT
+   INTERNAL LIGHT
+   ==================================================
+
+   This is the important part.
+
+   Instead of darkening/colouring the image,
+   we ADD warm light using SCREEN.
+
+   This should feel like light coming through
+   the washi rather than orange paint.
    ================================================== */
 
 .inner-light {
@@ -166,7 +175,7 @@ body {
     0;
 
   z-index:
-    4;
+    3;
 
   pointer-events:
     none;
@@ -178,7 +187,7 @@ body {
     0;
 
   mix-blend-mode:
-    multiply;
+    screen;
 
   -webkit-mask-image:
     url("lamp.png");
@@ -211,7 +220,11 @@ body {
 
 
 /* ==================================================
-   SOFT INNER WARMTH
+   SOFT SECOND LIGHT
+   ==================================================
+
+   A lower-opacity layer adds warmth without
+   flattening the paper texture.
    ================================================== */
 
 .inner-warmth {
@@ -223,13 +236,13 @@ body {
     0;
 
   z-index:
-    5;
+    4;
 
   pointer-events:
     none;
 
   background:
-    rgba(249, 128, 33, .55);
+    var(--orange);
 
   opacity:
     0;
@@ -268,7 +281,7 @@ body {
 
 
 /* ==================================================
-   CONCENTRATED OUTER LIGHT
+   CONCENTRATED OUTER GLOW
    ================================================== */
 
 .glow {
@@ -277,7 +290,7 @@ body {
     absolute;
 
   width:
-    min(30%, 120px);
+    min(31%, 125px);
 
   aspect-ratio:
     1;
@@ -290,14 +303,14 @@ body {
     radial-gradient(
       circle,
 
-      rgba(249, 128, 33, .26)
+      rgba(249, 128, 33, .30)
       0%,
 
-      rgba(249, 128, 33, .12)
-      30%,
+      rgba(249, 128, 33, .15)
+      28%,
 
-      rgba(249, 128, 33, .035)
-      52%,
+      rgba(249, 128, 33, .055)
+      50%,
 
       transparent
       70%
@@ -379,7 +392,7 @@ body {
 .lamp-room.dusk .inner-light {
 
   opacity:
-    .23;
+    .18;
 
 }
 
@@ -387,7 +400,7 @@ body {
 .lamp-room.dusk .inner-warmth {
 
   opacity:
-    .13;
+    .10;
 
 }
 
@@ -396,9 +409,9 @@ body {
 
   filter:
 
-    saturate(1.12)
+    saturate(1.04)
 
-    sepia(.08)
+    sepia(.03)
 
     drop-shadow(
       0 0 5px
@@ -415,18 +428,23 @@ body {
 .lamp-room.lit .glow {
 
   opacity:
-    .85;
+    .88;
 
   transform:
-    scale(1.02);
+    scale(1.04);
 
 }
 
 
 .lamp-room.lit .inner-light {
 
+  /*
+     This is now the main source of
+     visible orange light.
+  */
+
   opacity:
-    .42;
+    .55;
 
 }
 
@@ -434,22 +452,28 @@ body {
 .lamp-room.lit .inner-warmth {
 
   opacity:
-    .24;
+    .20;
 
 }
 
 
 .lamp-room.lit .lamp {
 
+  /*
+     Almost no colour manipulation.
+     The light comes from the layer behind/over
+     the paper rather than painting the PNG.
+  */
+
   filter:
 
-    saturate(1.30)
+    saturate(1.08)
 
-    sepia(.18)
+    sepia(.04)
 
     drop-shadow(
-      0 0 8px
-      rgba(249, 128, 33, .34)
+      0 0 9px
+      rgba(249, 128, 33, .38)
     );
 
 }
@@ -468,7 +492,7 @@ body {
     absolute;
 
   width:
-    min(20%, 80px);
+    min(22%, 90px);
 
   aspect-ratio:
     1;
@@ -480,7 +504,7 @@ body {
     var(--orange);
 
   filter:
-    blur(24px);
+    blur(26px);
 
   opacity:
     0;
@@ -497,7 +521,7 @@ body {
 .lamp-room.dusk::after {
 
   opacity:
-    .06;
+    .07;
 
 }
 
@@ -505,7 +529,7 @@ body {
 .lamp-room.lit::after {
 
   opacity:
-    .12;
+    .15;
 
 }
 
@@ -659,7 +683,7 @@ body {
     >
 
 
-    <!-- INNER ORANGE -->
+    <!-- INTERNAL ORANGE LIGHT -->
 
     <div
       class="inner-light"
