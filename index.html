@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 
@@ -18,7 +17,7 @@
 
 /* ==================================================
    PAPER LAMP
-   Akari-inspired / Warm Orange Light
+   Akari-inspired / Warm Orange Interior
    ================================================== */
 
 :root {
@@ -105,7 +104,25 @@ body {
 
 
 /* ==================================================
-   LAMP
+   LAMP WRAPPER
+   ================================================== */
+
+.lamp-wrapper {
+
+  position:
+    relative;
+
+  width:
+    min(62%, 260px);
+
+  z-index:
+    2;
+
+}
+
+
+/* ==================================================
+   ORIGINAL LAMP
    ================================================== */
 
 .lamp {
@@ -114,18 +131,16 @@ body {
     relative;
 
   width:
-    min(62%, 260px);
+    100%;
+
+  height:
+    auto;
 
   display:
     block;
 
   z-index:
-    2;
-
-  /*
-     Keep the original paper texture.
-     We do NOT increase brightness.
-  */
+    3;
 
   transition:
     filter 3s ease;
@@ -134,7 +149,129 @@ body {
 
 
 /* ==================================================
-   CONCENTRATED LIGHT
+   INNER ORANGE LAYER
+   ==================================================
+
+   This layer uses the PNG itself as a mask,
+   so the orange remains inside the lamp.
+   ================================================== */
+
+.inner-light {
+
+  position:
+    absolute;
+
+  inset:
+    0;
+
+  z-index:
+    4;
+
+  pointer-events:
+    none;
+
+  background:
+    var(--orange);
+
+  opacity:
+    0;
+
+  mix-blend-mode:
+    multiply;
+
+  -webkit-mask-image:
+    url("lamp.png");
+
+  mask-image:
+    url("lamp.png");
+
+  -webkit-mask-repeat:
+    no-repeat;
+
+  mask-repeat:
+    no-repeat;
+
+  -webkit-mask-position:
+    center;
+
+  mask-position:
+    center;
+
+  -webkit-mask-size:
+    contain;
+
+  mask-size:
+    contain;
+
+  transition:
+    opacity 3s ease;
+
+}
+
+
+/* ==================================================
+   SECOND INNER LIGHT
+   ==================================================
+
+   A softer layer gives the paper some warmth
+   without destroying the texture.
+   ================================================== */
+
+.inner-warmth {
+
+  position:
+    absolute;
+
+  inset:
+    0;
+
+  z-index:
+    5;
+
+  pointer-events:
+    none;
+
+  background:
+    rgba(249, 128, 33, .55);
+
+  opacity:
+    0;
+
+  mix-blend-mode:
+    soft-light;
+
+  -webkit-mask-image:
+    url("lamp.png");
+
+  mask-image:
+    url("lamp.png");
+
+  -webkit-mask-repeat:
+    no-repeat;
+
+  mask-repeat:
+    no-repeat;
+
+  -webkit-mask-position:
+    center;
+
+  mask-position:
+    center;
+
+  -webkit-mask-size:
+    contain;
+
+  mask-size:
+    contain;
+
+  transition:
+    opacity 3s ease;
+
+}
+
+
+/* ==================================================
+   CONCENTRATED OUTER LIGHT
    ================================================== */
 
 .glow {
@@ -151,27 +288,22 @@ body {
   border-radius:
     50%;
 
-  /*
-     Strong orange centre,
-     fading very quickly.
-  */
-
   background:
 
     radial-gradient(
       circle,
 
-      rgba(249, 128, 33, .32)
+      rgba(249, 128, 33, .26)
       0%,
 
-      rgba(249, 128, 33, .16)
-      28%,
+      rgba(249, 128, 33, .12)
+      30%,
 
-      rgba(249, 128, 33, .055)
-      48%,
+      rgba(249, 128, 33, .035)
+      52%,
 
       transparent
-      68%
+      70%
     );
 
   filter:
@@ -202,8 +334,21 @@ body {
   opacity:
     0;
 
-  transform:
-    scale(.72);
+}
+
+
+.lamp-room.day .inner-light {
+
+  opacity:
+    0;
+
+}
+
+
+.lamp-room.day .inner-warmth {
+
+  opacity:
+    0;
 
 }
 
@@ -223,27 +368,35 @@ body {
 .lamp-room.dusk .glow {
 
   opacity:
-    .35;
+    .38;
 
   transform:
-    scale(.86);
+    scale(.88);
+
+}
+
+
+.lamp-room.dusk .inner-light {
+
+  opacity:
+    .18;
+
+}
+
+
+.lamp-room.dusk .inner-warmth {
+
+  opacity:
+    .10;
 
 }
 
 
 .lamp-room.dusk .lamp {
 
-  /*
-     Very subtle warmth.
-     Paper texture remains untouched.
-  */
-
   filter:
-
-    sepia(.10)
-
     saturate(1.08)
-
+    sepia(.08)
     drop-shadow(
       0 0 4px
       rgba(249, 128, 33, .18)
@@ -267,20 +420,29 @@ body {
 }
 
 
+.lamp-room.lit .inner-light {
+
+  opacity:
+    .32;
+
+}
+
+
+.lamp-room.lit .inner-warmth {
+
+  opacity:
+    .18;
+
+}
+
+
 .lamp-room.lit .lamp {
-
-  /*
-     The image itself stays relatively dark.
-
-     We use colour rather than brightness
-     so the washi texture remains visible.
-  */
 
   filter:
 
-    sepia(.24)
+    saturate(1.22)
 
-    saturate(1.34)
+    sepia(.18)
 
     drop-shadow(
       0 0 7px
@@ -291,13 +453,8 @@ body {
 
 
 /* ==================================================
-   INNER LIGHT
-   ==================================================
-
-   A subtle orange layer sits behind the lamp,
-   giving the impression that the light comes
-   from inside the paper rather than outside it.
-   */
+   SUBTLE OUTER AMBIENT LIGHT
+   ================================================== */
 
 .lamp-room::after {
 
@@ -308,7 +465,7 @@ body {
     absolute;
 
   width:
-    min(24%, 95px);
+    min(20%, 80px);
 
   aspect-ratio:
     1;
@@ -320,7 +477,7 @@ body {
     var(--orange);
 
   filter:
-    blur(25px);
+    blur(24px);
 
   opacity:
     0;
@@ -337,7 +494,7 @@ body {
 .lamp-room.dusk::after {
 
   opacity:
-    .10;
+    .06;
 
 }
 
@@ -345,7 +502,31 @@ body {
 .lamp-room.lit::after {
 
   opacity:
-    .22;
+    .12;
+
+}
+
+
+/* ==================================================
+   LAMP SIZE ON SMALL SCREENS
+   ================================================== */
+
+@media (max-width: 420px) {
+
+  .lamp-wrapper {
+
+    width:
+      min(70%, 220px);
+
+  }
+
+
+  .glow {
+
+    width:
+      36%;
+
+  }
 
 }
 
@@ -369,7 +550,7 @@ body {
     translateX(-50%);
 
   z-index:
-    10;
+    20;
 
   display:
     flex;
@@ -442,38 +623,6 @@ body {
 
 }
 
-
-/* ==================================================
-   MOBILE
-   ================================================== */
-
-@media (max-width: 420px) {
-
-  .lamp {
-
-    width:
-      min(70%, 220px);
-
-  }
-
-
-  .glow {
-
-    width:
-      36%;
-
-  }
-
-
-  .lamp-room::after {
-
-    width:
-      30%;
-
-  }
-
-}
-
 </style>
 
 </head>
@@ -488,7 +637,7 @@ body {
 >
 
 
-  <!-- CONCENTRATED LIGHT -->
+  <!-- OUTER LIGHT -->
 
   <div
     class="glow"
@@ -496,13 +645,33 @@ body {
   ></div>
 
 
-  <!-- AKARI PNG -->
+  <!-- LAMP -->
 
-  <img
-    src="lamp.png"
-    class="lamp"
-    alt=""
-  >
+  <div class="lamp-wrapper">
+
+    <img
+      src="lamp.png"
+      class="lamp"
+      alt=""
+    >
+
+
+    <!-- INNER ORANGE -->
+
+    <div
+      class="inner-light"
+      aria-hidden="true"
+    ></div>
+
+
+    <!-- SOFT WARMTH -->
+
+    <div
+      class="inner-warmth"
+      aria-hidden="true"
+    ></div>
+
+  </div>
 
 
   <!-- TEST CONTROLS -->
@@ -596,7 +765,7 @@ const buttons = {
 
 
 /* ==================================================
-   SUNSET CALCULATION
+   SUNSET
    ================================================== */
 
 function getSunset(date) {
